@@ -1,0 +1,59 @@
+---
+import "../styles/global.css";
+import { site, couple } from "../data/wedding";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+} = Astro.props;
+
+const canonical = new URL("/", site.url).href;
+const ogImage = new URL("/favicon.svg", site.url).href;
+const analyticsToken = import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN;
+---
+
+<!doctype html>
+<html lang={site.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#fbf7f0" />
+    <meta name="color-scheme" content="light" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+    <link rel="preconnect" href="https://www.google.com" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={couple.displayName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot />
+    {
+      analyticsToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: analyticsToken })}
+        />
+      )
+    }
+  </body>
+</html>

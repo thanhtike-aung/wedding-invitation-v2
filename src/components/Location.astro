@@ -1,0 +1,105 @@
+---
+import { event, googleCalendarUrl, mapEmbedUrl } from "../data/wedding";
+---
+
+<section class="section section-tint" id="location" aria-labelledby="location-title">
+  <div class="container location">
+    <div class="section-head reveal">
+      <span class="eyebrow">Location</span>
+      <h2 id="location-title" class="section-title">{event.venueName}</h2>
+      <p class="lead">{event.city}, Myanmar</p>
+    </div>
+
+    <div class="address-grid reveal">
+      <div class="address">
+        <p class="address-label">English address</p>
+        <p class="address-text">{event.addressEn}</p>
+      </div>
+      <div class="address">
+        <p class="address-label">Official Burmese address</p>
+        <p class="address-text" lang="my">{event.addressMy}</p>
+      </div>
+    </div>
+
+    <div class="map reveal reveal-scale">
+      <iframe
+        title={`Map showing ${event.venueName}, ${event.addressEn}`}
+        src={mapEmbedUrl}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="btn-row reveal">
+      <a class="btn btn-solid" href={event.mapsShortUrl} target="_blank" rel="noopener noreferrer">
+        Open in Google Maps
+      </a>
+      <a class="btn" href={googleCalendarUrl} target="_blank" rel="noopener noreferrer">
+        Add to Google Calendar
+      </a>
+      <a class="btn" href="/wedding.ics" download="aung-and-phoo-wedding.ics">Download .ics</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .location {
+    text-align: center;
+  }
+
+  .address-grid {
+    display: grid;
+    gap: 1rem;
+    max-width: 52rem;
+    margin: 0 auto 2rem;
+  }
+
+  .address {
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    background: var(--paper);
+  }
+
+  .address-label {
+    margin: 0 0 0.3rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bronze);
+  }
+
+  .address-text {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 2.6vw, 1.3rem);
+    line-height: 1.5;
+  }
+
+  .map {
+    max-width: 52rem;
+    margin: 0 auto 2rem;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    background: var(--cream);
+  }
+
+  .map iframe {
+    display: block;
+    width: 100%;
+    height: 320px;
+    border: 0;
+  }
+
+  @media (min-width: 720px) {
+    .address-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .map iframe {
+      height: 400px;
+    }
+  }
+</style>

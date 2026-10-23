@@ -1,0 +1,313 @@
+---
+import { gallery } from "../data/wedding";
+---
+
+<section class="section" id="gallery" aria-labelledby="gallery-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Gallery</span>
+      <h2 id="gallery-title" class="section-title">Moments we hold close</h2>
+      <p class="lead">Select a photograph to view it larger.</p>
+    </div>
+
+    <ul class="gallery" data-gallery>
+      {
+        gallery.map((photo, index) => (
+          <li class="gallery-item reveal reveal-scale" style={`--delay:${(index % 4) * 110}ms`}>
+            <button type="button" class="gallery-button" data-open data-src={photo.src} data-alt={photo.alt} aria-label={`View photo ${index + 1}: ${photo.alt}`}>
+              <img
+                src={photo.thumb}
+                alt={photo.alt}
+                width="600"
+                height="750"
+                loading={index < 2 ? "eager" : "lazy"}
+                decoding="async"
+              />
+              <span class="gallery-cue" aria-hidden="true">View</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <dialog class="lightbox" data-lightbox aria-label="Photo viewer">
+    <div class="lightbox-inner">
+      <button type="button" class="lb-close" data-lb-close aria-label="Close photo viewer">Close</button>
+      <figure class="lb-figure">
+        <img data-lb-img alt="" decoding="async" />
+        <figcaption data-lb-caption></figcaption>
+      </figure>
+      <div class="lb-nav">
+        <button type="button" data-lb-prev aria-label="Previous photo">&larr; Previous</button>
+        <span class="lb-count" data-lb-count aria-live="polite"></span>
+        <button type="button" data-lb-next aria-label="Next photo">Next &rarr;</button>
+      </div>
+    </div>
+  </dialog>
+</section>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("[data-lightbox]")!;
+  const img = document.querySelector<HTMLImageElement>("[data-lb-img]")!;
+  const caption = document.querySelector<HTMLElement>("[data-lb-caption]")!;
+  const count = document.querySelector<HTMLElement>("[data-lb-count]")!;
+  const triggers = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-open]"));
+  let current = 0;
+
+  const show = (index: number) => {
+    current = (index + triggers.length) % triggers.length;
+    const trigger = triggers[current];
+    img.src = trigger.dataset.src ?? "";
+    img.alt = trigger.dataset.alt ?? "";
+    caption.textContent = trigger.dataset.alt ?? "";
+    count.textContent = `${current + 1} / ${triggers.length}`;
+  };
+
+  triggers.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      show(index);
+      dialog.showModal();
+    });
+  });
+
+  document.querySelector("[data-lb-prev]")?.addEventListener("click", () => show(current - 1));
+  document.querySelector("[data-lb-next]")?.addEventListener("click", () => show(current + 1));
+  document.querySelector("[data-lb-close]")?.addEventListener("click", () => dialog.close());
+
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") show(current - 1);
+    if (event.key === "ArrowRight") show(current + 1);
+  });
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.6rem, 2vw, 1rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gallery-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--cream);
+    cursor: zoom-in;
+  }
+
+  .gallery-button {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .gallery-button img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    transition: transform 0.9s var(--ease), filter 0.9s var(--ease);
+  }
+
+  .gallery-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(180deg, rgba(162, 90, 64, 0.12) 0%, rgba(46, 36, 32, 0.08) 45%, rgba(46, 36, 32, 0.55) 100%);
+    mix-blend-mode: soft-light;
+    opacity: 0.8;
+    transition: opacity 0.6s var(--ease);
+    pointer-events: none;
+  }
+
+  .gallery-button::after {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    z-index: 2;
+    border: 1px solid rgba(251, 247, 240, 0.7);
+    border-radius: 999px 999px 10px 10px;
+    opacity: 0;
+    transform: scale(0.96);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    pointer-events: none;
+  }
+
+  .gallery-cue {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    z-index: 3;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(251, 247, 240, 0.9);
+    color: var(--espresso);
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translate(-50%, 8px);
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    pointer-events: none;
+  }
+
+  .gallery-button:hover::before,
+  .gallery-button:focus-visible::before {
+    opacity: 0.35;
+  }
+
+  .gallery-button:hover::after,
+  .gallery-button:focus-visible::after {
+    opacity: 1;
+    transform: none;
+  }
+
+  .gallery-button:hover .gallery-cue,
+  .gallery-button:focus-visible .gallery-cue {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .gallery-button:hover img,
+  .gallery-button:focus-visible img {
+    transform: scale(1.04);
+    filter: saturate(1.05);
+  }
+
+  .lightbox {
+    width: min(1100px, calc(100% - 1.5rem));
+    max-height: calc(100dvh - 1.5rem);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--ivory);
+  }
+
+  .lightbox::backdrop {
+    background: rgba(26, 20, 17, 0.92);
+  }
+
+  .lightbox[open] {
+    display: flex;
+    animation: lbIn 0.45s var(--ease) both;
+  }
+
+  .lightbox-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-height: calc(100dvh - 1.5rem);
+  }
+
+  .lb-close {
+    align-self: flex-end;
+    min-height: 44px;
+    padding: 0 0.9rem;
+    border: 1px solid rgba(251, 247, 240, 0.5);
+    border-radius: 999px;
+    background: none;
+    color: var(--ivory);
+    cursor: pointer;
+  }
+
+  .lb-figure {
+    margin: 0;
+    display: grid;
+    gap: 0.6rem;
+    min-height: 0;
+  }
+
+  .lb-figure img {
+    width: 100%;
+    max-height: calc(100dvh - 11rem);
+    object-fit: contain;
+    border-radius: 10px;
+  }
+
+  .lb-figure figcaption {
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(251, 247, 240, 0.8);
+  }
+
+  .lb-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .lb-nav button {
+    min-height: 44px;
+    padding: 0 0.9rem;
+    border: 0;
+    background: none;
+    color: var(--ivory);
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  .lb-count {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    color: rgba(251, 247, 240, 0.8);
+  }
+
+  @keyframes lbIn {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (hover: none), (max-width: 859px) {
+    .gallery-button::after {
+      opacity: 1;
+      transform: none;
+      animation: frameDrift 6s ease-in-out infinite;
+    }
+  }
+
+  @keyframes frameDrift {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    50% {
+      transform: translate(2px, -2px) scale(0.985);
+    }
+  }
+
+  @media (min-width: 860px) {
+    .gallery {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox[open] {
+      animation: none;
+    }
+
+    .gallery-button img {
+      transition: none;
+    }
+  }
+</style>

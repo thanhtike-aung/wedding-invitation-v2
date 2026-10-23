@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Journey from "../components/Journey.astro";
+import Details from "../components/Details.astro";
+import Schedule from "../components/Schedule.astro";
+import Gallery from "../components/Gallery.astro";
+import Location from "../components/Location.astro";
+import Closing from "../components/Closing.astro";
+import { site } from "../data/wedding";
+---
+
+<BaseLayout title={site.title} description={site.description}>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Journey />
+    <Details />
+    <Schedule />
+    <Gallery />
+    <Location />
+    <Closing />
+  </main>
+
+  <script>
+    const targets = document.querySelectorAll<HTMLElement>(".reveal");
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      targets.forEach((el) => el.classList.add("is-visible"));
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: "0px 0px -6% 0px" },
+      );
+      targets.forEach((el) => observer.observe(el));
+    }
+  </script>
+</BaseLayout>

@@ -1,0 +1,96 @@
+---
+import { journey } from "../data/wedding";
+---
+
+<section class="section" id="journey" aria-labelledby="journey-title">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow">Our Journey</span>
+      <h2 id="journey-title" class="section-title">{journey.heading}</h2>
+      <p class="lead">{journey.body}</p>
+    </div>
+
+    <ol class="chapters">
+      {
+        journey.chapters.map((chapter, index) => (
+          <li class="chapter reveal" style={`--delay:${index * 150}ms`}>
+            <span class="chapter-marker" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <p class="chapter-label">{chapter.label}</p>
+            <h3 class="chapter-title">{chapter.title}</h3>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .chapters {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 58rem;
+    margin-inline: auto;
+  }
+
+  .chapter {
+    position: relative;
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: 0.25rem 1.25rem;
+    padding: 1.6rem 0 1.6rem 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .chapter:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .chapter-marker {
+    grid-row: span 2;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--rose);
+    padding-top: 0.2rem;
+  }
+
+  .chapter-label {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+
+  .chapter-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.45rem, 3.5vw, 2rem);
+    line-height: 1.2;
+  }
+
+  @media (min-width: 860px) {
+    .chapters {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .chapter {
+      grid-template-columns: 1fr;
+      border-bottom: 0;
+      border-top: 1px solid var(--rule);
+      padding: 1.6rem 1.25rem 0 0;
+    }
+
+    .chapter:last-child {
+      border-bottom: 0;
+    }
+
+    .chapter-marker {
+      grid-row: auto;
+      margin-bottom: 0.75rem;
+    }
+  }
+</style>
