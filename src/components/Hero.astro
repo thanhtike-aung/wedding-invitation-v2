@@ -7,9 +7,34 @@ import { couple, event, hero } from "../data/wedding";
     <div class="hero-copy">
       <p class="eyebrow hero-in hero-in-1">A decade together</p>
       <h1 id="hero-title" class="names hero-in hero-in-2">
-        <span>Aung</span>
-        <span class="amp">&amp;</span>
-        <span>Phoo</span>
+        <span class="sr-only">Aung &amp; Phoo</span>
+        <span class="lockup" aria-hidden="true">
+          <svg class="sprigs" viewBox="0 0 577 433" focusable="false">
+            <defs>
+              <path id="leaf" d="M0 0Q18 -15 44 0Q18 15 0 0Z" fill="currentColor" fill-opacity="0.14" />
+              <g id="sprig" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M323 34A200 185 0 0 1 487 262" stroke-width="2.6" />
+                <use href="#leaf" transform="translate(372.6 48.4) rotate(63.4) scale(0.9)" />
+                <use href="#leaf" transform="translate(372.6 48.4) rotate(-16.6) scale(0.9)" />
+                <use href="#leaf" transform="translate(416.6 74.3) rotate(77.8) scale(1)" />
+                <use href="#leaf" transform="translate(416.6 74.3) rotate(-2.2) scale(1)" />
+                <use href="#leaf" transform="translate(451.8 109.8) rotate(92.8) scale(1.05)" />
+                <use href="#leaf" transform="translate(451.8 109.8) rotate(12.8) scale(1.05)" />
+                <use href="#leaf" transform="translate(476.8 153.7) rotate(108.5) scale(1)" />
+                <use href="#leaf" transform="translate(476.8 153.7) rotate(28.5) scale(1)" />
+                <use href="#leaf" transform="translate(487 199.9) rotate(124.6) scale(0.95)" />
+                <use href="#leaf" transform="translate(487 199.9) rotate(44.6) scale(0.95)" />
+                <circle cx="338" cy="36" r="5" />
+                <circle cx="350" cy="45" r="4" />
+                <circle cx="330" cy="46" r="3.5" />
+              </g>
+            </defs>
+            <use href="#sprig" />
+            <use href="#sprig" transform="matrix(-1 0 0 -1 576 432)" />
+          </svg>
+          <span class="name name-aung">Aung</span>
+          <span class="name name-phoo">Phoo</span>
+        </span>
       </h1>
       <p class="hero-message hero-in hero-in-3">
         Together with our families, we invite you to celebrate our wedding.
@@ -129,22 +154,58 @@ import { couple, event, hero } from "../data/wedding";
 
   .names {
     margin: 0 0 1.25rem;
-    font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(3.4rem, 13vw, 6.4rem);
-    line-height: 0.95;
-    letter-spacing: -0.02em;
   }
 
-  .names span {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .lockup {
+    position: relative;
     display: block;
+    width: min(440px, 88vw);
+    aspect-ratio: 577 / 433;
+    margin: 0 auto;
+    container-type: inline-size;
+    color: var(--bronze);
   }
 
-  .amp {
-    font-style: italic;
-    color: var(--rose);
-    font-size: 0.55em;
-    line-height: 1.2;
+  .sprigs {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .name {
+    position: absolute;
+    margin: 0;
+    font-family: "Allura", "Pinyon Script", cursive;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .name-aung {
+    left: 19%;
+    top: 13%;
+    font-size: 25cqw;
+  }
+
+  .name-phoo {
+    left: 38%;
+    top: 50%;
+    font-size: 23cqw;
   }
 
   .hero-message {
@@ -191,16 +252,12 @@ import { couple, event, hero } from "../data/wedding";
     animation: ringTurn 40s linear infinite;
   }
 
-  .names span {
+  .name-aung {
     animation: nameRise 1.2s var(--ease) both;
   }
 
-  .names span:nth-child(2) {
-    animation-delay: 0.15s;
-  }
-
-  .names span:nth-child(3) {
-    animation-delay: 0.3s;
+  .name-phoo {
+    animation: nameRise 1.2s var(--ease) 0.2s both;
   }
 
   .num.is-ticking {
@@ -394,6 +451,10 @@ import { couple, event, hero } from "../data/wedding";
       margin-left: 0;
     }
 
+    .lockup {
+      margin-left: 0;
+    }
+
     .hero-actions {
       justify-content: flex-start;
     }
@@ -415,7 +476,7 @@ import { couple, event, hero } from "../data/wedding";
   @media (prefers-reduced-motion: reduce) {
     .hero-img,
     .hero-in,
-    .names span,
+    .name,
     .num.is-ticking,
     .frame::after {
       animation: none;

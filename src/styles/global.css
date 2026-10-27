@@ -11,8 +11,8 @@
   --bronze: #8e6a43;
   --rule: rgba(46, 36, 32, 0.16);
 
-  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
-  --font-body: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
+  --font-body: "Lora", Georgia, "Times New Roman", serif;
   --font-my: "Myanmar Text", "Noto Sans Myanmar", "Leelawadee UI", sans-serif;
 
   --container: min(1120px, calc(100% - 2.5rem));

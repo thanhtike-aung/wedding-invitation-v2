@@ -1,5 +1,16 @@
 ---
 import { journey } from "../data/wedding";
+
+const icons: Record<string, string> = {
+  heart:
+    '<path d="M12 20s-7-4.35-7-10a4 4 0 0 1 7-2.65A4 4 0 0 1 19 10c0 5.65-7 10-7 10z" />',
+  sprout:
+    '<path d="M12 21v-9" /><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7z" /><path d="M12 15c0-3-2.5-5-6-5 0 3 2.5 5 6 5z" />',
+  sparkle:
+    '<circle cx="12" cy="12" r="3.5" /><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8" />',
+  infinity:
+    '<path d="M12 12c-2-2.5-4-4-6-4a4 4 0 0 0 0 8c2 0 4-1.5 6-4zm0 0c2 2.5 4 4 6 4a4 4 0 0 0 0-8c-2 0-4 1.5-6 4z" />',
+};
 ---
 
 <section class="section" id="journey" aria-labelledby="journey-title">
@@ -14,9 +25,12 @@ import { journey } from "../data/wedding";
       {
         journey.chapters.map((chapter, index) => (
           <li class="chapter reveal" style={`--delay:${index * 150}ms`}>
-            <span class="chapter-marker" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <span class="chapter-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" set:html={icons[chapter.icon]} />
+            </span>
             <p class="chapter-label">{chapter.label}</p>
             <h3 class="chapter-title">{chapter.title}</h3>
+            <p class="chapter-text">{chapter.text}</p>
           </li>
         ))
       }
@@ -39,25 +53,62 @@ import { journey } from "../data/wedding";
     position: relative;
     display: grid;
     grid-template-columns: 3.5rem 1fr;
-    gap: 0.25rem 1.25rem;
-    padding: 1.6rem 0 1.6rem 0;
-    border-top: 1px solid var(--rule);
+    column-gap: 1.25rem;
+    padding: 1.25rem 0;
   }
 
-  .chapter:last-child {
-    border-bottom: 1px solid var(--rule);
+  .chapter:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 1.75rem;
+    top: 4.75rem;
+    bottom: -1.25rem;
+    width: 1px;
+    background: var(--rule);
   }
 
-  .chapter-marker {
-    grid-row: span 2;
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-    color: var(--rose);
-    padding-top: 0.2rem;
+  .chapter-icon {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    position: relative;
+    z-index: 1;
+    width: 3.5rem;
+    height: 3.5rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: linear-gradient(135deg, var(--paper), var(--cream));
+    box-shadow: 0 8px 18px rgba(46, 36, 32, 0.08);
+    color: var(--terracotta);
+    transition:
+      transform 0.4s var(--ease),
+      color 0.4s var(--ease);
+  }
+
+  .chapter-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .chapter:hover .chapter-icon {
+    transform: translateY(-3px);
+    color: var(--sage);
+  }
+
+  .chapter-label,
+  .chapter-title,
+  .chapter-text {
+    grid-column: 2;
   }
 
   .chapter-label {
-    margin: 0;
+    margin: 0.35rem 0 0;
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -65,11 +116,18 @@ import { journey } from "../data/wedding";
   }
 
   .chapter-title {
-    margin: 0;
+    margin: 0.3rem 0 0;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(1.45rem, 3.5vw, 2rem);
+    font-size: clamp(1.4rem, 3.5vw, 1.85rem);
     line-height: 1.2;
+  }
+
+  .chapter-text {
+    margin: 0.5rem 0 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--muted);
   }
 
   @media (min-width: 860px) {
@@ -79,18 +137,44 @@ import { journey } from "../data/wedding";
 
     .chapter {
       grid-template-columns: 1fr;
-      border-bottom: 0;
-      border-top: 1px solid var(--rule);
-      padding: 1.6rem 1.25rem 0 0;
+      justify-items: center;
+      padding: 0 1rem;
+      text-align: center;
     }
 
-    .chapter:last-child {
-      border-bottom: 0;
+    .chapter:not(:last-child)::after {
+      left: calc(50% + 2rem);
+      right: calc(-50% + 2rem);
+      top: 1.75rem;
+      bottom: auto;
+      width: auto;
+      height: 0;
+      border-top: 1px dashed var(--rule);
+      background: none;
     }
 
-    .chapter-marker {
+    .chapter-icon {
+      grid-column: auto;
       grid-row: auto;
-      margin-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .chapter-label,
+    .chapter-title,
+    .chapter-text {
+      grid-column: 1;
+    }
+
+    .chapter-label {
+      margin-top: 0;
+    }
+
+    .chapter-title {
+      margin-top: 0.3rem;
+    }
+
+    .chapter-text {
+      max-width: 16rem;
     }
   }
 </style>
