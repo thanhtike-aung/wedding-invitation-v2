@@ -12,6 +12,7 @@ import { site } from "../data/wedding";
 ---
 
 <BaseLayout title={site.title} description={site.description}>
+  <div class="scroll-progress" data-progress aria-hidden="true"></div>
   <Header />
   <main id="main">
     <Hero />
@@ -24,6 +25,15 @@ import { site } from "../data/wedding";
   </main>
 
   <script>
+    const bar = document.querySelector<HTMLElement>("[data-progress]");
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      if (bar) bar.style.transform = `scaleX(${ratio})`;
+    };
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    updateProgress();
+
     const targets = document.querySelectorAll<HTMLElement>(".reveal");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

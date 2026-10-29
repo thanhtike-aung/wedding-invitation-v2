@@ -91,9 +91,8 @@ export const schedule = [
 ];
 
 export const hero = {
-  image:
-    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=80",
-  imageAlt: "Soft-focus wedding celebration with warm light",
+  image: "/hero.webp",
+  imageAlt: "Aung and Phoo standing together under a lantern-lit colonnade",
 };
 
 export type GalleryItem = {
@@ -105,64 +104,64 @@ export type GalleryItem = {
 
 export const gallery: GalleryItem[] = [
   {
-    src: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=70",
+    src: "/gallery/large/gallery-01.webp",
+    thumb: "/gallery/thumb/gallery-01.webp",
     alt: "Wedding celebration with warm lights",
     caption: "Under the warm lights",
   },
   {
-    src: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=600&q=70",
-    alt: "Soft-focus celebration portrait",
-    caption: "Hearts in focus",
+    src: "/gallery/large/gallery-02.webp",
+    thumb: "/gallery/thumb/gallery-02.webp",
+    alt: "Aung and Phoo in profile, facing each other against a warm glow",
+    caption: "Face to face",
   },
   {
-    src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=70",
-    alt: "Table setting with candles",
-    caption: "Candlelit evenings",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=70",
-    alt: "Couple walking together outdoors",
+    src: "/gallery/large/gallery-03.webp",
+    thumb: "/gallery/thumb/gallery-03.webp",
+    alt: "Aung and Phoo holding hands beside a cream wall with a lantern",
     caption: "Hand in hand",
   },
   {
-    src: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=600&q=70",
-    alt: "Floral arrangement in soft light",
-    caption: "Blooms in soft light",
+    src: "/gallery/large/gallery-10.webp",
+    thumb: "/gallery/thumb/gallery-10.webp",
+    alt: "Aung and Phoo close together under the lights of a historic building at night",
+    caption: "Under city lights",
   },
   {
-    src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=70",
-    alt: "Elegant floral centerpiece",
-    caption: "Petals & promises",
+    src: "/gallery/large/gallery-05.webp",
+    thumb: "/gallery/thumb/gallery-05.webp",
+    alt: "Phoo in a soft veil, touching her earring and holding white tulips",
+    caption: "Bridal grace",
   },
   {
-    src: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?auto=format&fit=crop&w=600&q=70",
-    alt: "Bridal details in cream tones",
-    caption: "Every little detail",
+    src: "/gallery/large/gallery-06.webp",
+    thumb: "/gallery/thumb/gallery-06.webp",
+    alt: "Aung and Phoo embracing in front of a red floral wall and a Marry Me sign",
+    caption: "Marry me",
   },
   {
-    src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=70",
-    alt: "Guests gathered for a celebration",
-    caption: "Gathered with love",
+    src: "/gallery/large/gallery-07.webp",
+    thumb: "/gallery/thumb/gallery-07.webp",
+    alt: "Aung and Phoo walking together across a street in front of a colonial building",
+    caption: "Side by side",
   },
   {
-    src: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=600&q=70",
-    alt: "Golden hour portrait",
-    caption: "Golden hour",
+    src: "/gallery/large/gallery-08.webp",
+    thumb: "/gallery/thumb/gallery-08.webp",
+    alt: "Aung and Phoo in traditional Myanmar attire in a richly decorated room",
+    caption: "Our heritage",
   },
   {
-    src: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=1600&q=80",
-    thumb: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&w=600&q=70",
-    alt: "Close-up of flowers in warm tones",
-    caption: "Warm tones",
+    src: "/gallery/large/gallery-09.webp",
+    thumb: "/gallery/thumb/gallery-09.webp",
+    alt: "Black and white photo of Aung and Phoo walking hand in hand at night",
+    caption: "Night stroll",
+  },
+  {
+    src: "/gallery/large/gallery-04.webp",
+    thumb: "/gallery/thumb/gallery-04.webp",
+    alt: "Aung kissing Phoo's hand in front of a bright arched window",
+    caption: "A gentle gesture",
   },
 ];
 

@@ -1,5 +1,11 @@
 ---
-import { couple, event, hero } from "../data/wedding";
+import { couple, event, gallery, hero } from "../data/wedding";
+
+const cards = [
+  { src: gallery[3].thumb, alt: "" },
+  { src: gallery[1].thumb, alt: "" },
+  { src: hero.image, alt: hero.imageAlt },
+];
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title">
@@ -34,6 +40,11 @@ import { couple, event, hero } from "../data/wedding";
           </svg>
           <span class="name name-aung">Aung</span>
           <span class="name name-phoo">Phoo</span>
+          <span class="heart" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path d="M12 21C12 21 3 15.5 3 9.5 3 6.4 5.4 4 8.3 4 10 4 11.3 4.9 12 6.1 12.7 4.9 14 4 15.7 4 18.6 4 21 6.4 21 9.5 21 15.5 12 21 12 21Z" />
+            </svg>
+          </span>
         </span>
       </h1>
       <p class="hero-message hero-in hero-in-3">
@@ -50,18 +61,24 @@ import { couple, event, hero } from "../data/wedding";
       </div>
     </div>
 
-    <figure class="hero-media hero-in hero-in-2">
-      <div class="frame" data-parallax>
-        <div class="photo">
-          <img
-          src={hero.image}
-          alt={hero.imageAlt}
-          width="1800"
-          height="1200"
-          fetchpriority="high"
-          decoding="async"
-          class="hero-img"
-        />
+    <figure class="hero-media">
+      <div class="tilt" data-tilt>
+        <div class="frame" data-parallax>
+          {
+            cards.map((card, index) => (
+              <div class={`card card-${index}`}>
+                <img
+                  src={card.src}
+                  alt={card.alt}
+                  width="600"
+                  height="750"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            ))
+          }
+          <span class="floor" aria-hidden="true"></span>
         </div>
       </div>
     </figure>
@@ -82,6 +99,24 @@ import { couple, event, hero } from "../data/wedding";
 <script>
   const frame = document.querySelector<HTMLElement>("[data-parallax]");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const tilt = document.querySelector<HTMLElement>("[data-tilt]");
+  const canTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  if (tilt && canTilt && !reduceMotion) {
+    tilt.addEventListener("pointermove", (event) => {
+      const rect = tilt.parentElement!.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      tilt.style.setProperty("--ry", `${(x * 24).toFixed(2)}deg`);
+      tilt.style.setProperty("--rx", `${(-y * 24).toFixed(2)}deg`);
+    });
+
+    tilt.addEventListener("pointerleave", () => {
+      tilt.style.setProperty("--rx", "0deg");
+      tilt.style.setProperty("--ry", "0deg");
+    });
+  }
 
   if (frame && !reduceMotion) {
     const onScroll = () => {
@@ -200,12 +235,29 @@ import { couple, event, hero } from "../data/wedding";
     left: 19%;
     top: 13%;
     font-size: 25cqw;
+    animation: nameRise 1.2s var(--ease) both;
   }
 
   .name-phoo {
     left: 38%;
     top: 50%;
     font-size: 23cqw;
+    animation: nameRise 1.2s var(--ease) 0.2s both;
+  }
+
+  .heart {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    width: 11cqw;
+    transform: translate(-50%, -50%);
+  }
+
+  .heart svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    fill: currentColor;
   }
 
   .hero-message {
@@ -230,106 +282,110 @@ import { couple, event, hero } from "../data/wedding";
   .hero-media {
     margin: 0 auto;
     width: min(340px, 78vw);
+    perspective: 1000px;
+  }
+
+  .tilt {
+    --rx: 0deg;
+    --ry: 0deg;
+    transform: rotateX(var(--rx)) rotateY(var(--ry));
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease);
+    animation: floatY 7s ease-in-out 2.5s infinite;
+  }
+
+  @keyframes floatY {
+    0%,
+    100% {
+      translate: 0 0;
+    }
+    50% {
+      translate: 0 -8px;
+    }
   }
 
   .frame {
     position: relative;
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    padding: 10px;
-    border: 1px solid var(--bronze);
+    aspect-ratio: 4 / 5;
     transform: translateY(var(--py, 0px));
+    transform-style: preserve-3d;
     will-change: transform;
+    --s: 1;
   }
 
-  .frame::after {
-    content: "";
+  .frame:hover {
+    --s: 1.35;
+  }
+
+  .card {
+    --x: 0%;
+    --z: 0px;
+    --r: 0deg;
+    --rz: 0deg;
+    --delay: 0s;
     position: absolute;
-    inset: -14px;
-    border-radius: 50%;
-    border: 1px dashed rgba(142, 106, 67, 0.35);
-    pointer-events: none;
-    animation: ringTurn 40s linear infinite;
-  }
-
-  .name-aung {
-    animation: nameRise 1.2s var(--ease) both;
-  }
-
-  .name-phoo {
-    animation: nameRise 1.2s var(--ease) 0.2s both;
-  }
-
-  .num.is-ticking {
-    animation: tick 0.45s var(--ease);
-  }
-
-  @keyframes nameRise {
-    from {
-      opacity: 0;
-      transform: translateY(0.35em);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @keyframes tick {
-    from {
-      opacity: 0.25;
-      transform: translateY(-0.3em);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @keyframes ringTurn {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
-  .photo {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+    inset: 6%;
+    border: 6px solid var(--paper);
+    border-radius: 14px;
     overflow: hidden;
-    isolation: isolate;
+    background: var(--cream);
+    box-shadow: 0 24px 40px -18px rgba(46, 36, 32, 0.5);
+    transform: translate3d(calc(var(--x) * var(--s)), 0, calc(var(--z) * var(--s)))
+      rotateY(calc(var(--r) * var(--s))) rotateZ(var(--rz));
+    transition: transform 0.9s var(--ease);
+    animation: cardIn 1.8s var(--ease) var(--delay) backwards;
   }
 
-  .photo::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 30% 18%, rgba(251, 247, 240, 0.22), transparent 55%),
-      linear-gradient(180deg, rgba(162, 90, 64, 0.1) 0%, rgba(46, 36, 32, 0.12) 55%, rgba(46, 36, 32, 0.5) 100%);
-    mix-blend-mode: soft-light;
-    pointer-events: none;
-  }
-
-  .photo::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1px rgba(251, 247, 240, 0.35), inset 0 -60px 80px -40px rgba(46, 36, 32, 0.45);
-    pointer-events: none;
-  }
-
-  .hero-img {
+  .card img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background: var(--cream);
-    animation: heroFade 1.6s var(--ease) both;
+  }
+
+  .card-0 {
+    --x: 24%;
+    --z: -100px;
+    --r: 14deg;
+    --rz: 4deg;
+    --delay: 0.35s;
+  }
+
+  .card-1 {
+    --x: -20%;
+    --z: -50px;
+    --r: -10deg;
+    --rz: -3deg;
+    --delay: 0.2s;
+  }
+
+  .card-2 {
+    --x: 0%;
+    --z: 40px;
+    --r: 0deg;
+    --rz: 0deg;
+    --delay: 0.05s;
+  }
+
+  @keyframes cardIn {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 0, -260px) rotateY(70deg);
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .floor {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: -4%;
+    height: 12%;
+    background: radial-gradient(ellipse at center, rgba(46, 36, 32, 0.35), transparent 70%);
+    translate: 0 0 -140px;
+    pointer-events: none;
   }
 
   .countdown-wrap {
@@ -377,6 +433,10 @@ import { couple, event, hero } from "../data/wedding";
     font-variant-numeric: tabular-nums;
   }
 
+  .num.is-ticking {
+    animation: tick 0.45s var(--ease);
+  }
+
   .unit {
     font-size: 0.7rem;
     letter-spacing: 0.14em;
@@ -415,10 +475,10 @@ import { couple, event, hero } from "../data/wedding";
     justify-content: center;
   }
 
-  @keyframes rise {
+  @keyframes nameRise {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(0.35em);
     }
     to {
       opacity: 1;
@@ -426,10 +486,21 @@ import { couple, event, hero } from "../data/wedding";
     }
   }
 
-  @keyframes heroFade {
+  @keyframes tick {
+    from {
+      opacity: 0.25;
+      transform: translateY(-0.3em);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes rise {
     from {
       opacity: 0;
-      transform: scale(1.04);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
@@ -474,16 +545,28 @@ import { couple, event, hero } from "../data/wedding";
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-img,
     .hero-in,
     .name,
     .num.is-ticking,
-    .frame::after {
+    .card,
+    .tilt {
       animation: none;
+    }
+
+    .card {
+      transition: none;
+    }
+
+    .tilt {
+      transform: none;
     }
 
     .frame {
       transform: none;
+    }
+
+    .frame:hover {
+      --s: 1;
     }
   }
 </style>
